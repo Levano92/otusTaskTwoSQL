@@ -1,14 +1,13 @@
 package tables;
 import db.MySQLConnector;
-import objects.Device;
 import objects.Student;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+
 public class StudentsTable extends AbsTable{
-    private final static String TABLE_NAME = "Students";
+    private final static String TABLE_NAME = "students";
 
     public StudentsTable() {
         super(TABLE_NAME);
@@ -52,26 +51,37 @@ public class StudentsTable extends AbsTable{
 
 
 
-    public  void  getFullInformation(){
+    public ArrayList<String> getFullInformation() {
         db = new MySQLConnector();
-        final String sqlRequest = "select students.student_id  , students.student_fio , students.sex , studygroup.group_name , curator.curator_fio\n" +
-                "from students\n" +
-                "inner join studygroup on students.group_id = studygroup.group_id \n" +
-                "inner join curator on studygroup.curator_id  = curator.curator_id  ;";
-        db.executeRequest(sqlRequest);
-        db.close();
+        final String sqlRequest =
+                "SELECT s.student_id as 'номер', s.student_fio as 'фио', s.sex as 'пол', sg.group_name as 'группа', c.curator_fio as 'фио куратора'" +
+                        " FROM students s" +
+                        " INNER JOIN studygroup sg ON sg.group_id = s.group_id" +
+                        " INNER JOIN curator c ON sg.curator_id = c.curator_id;";
+        ResultSet rs = db.executeRequestWithAnswer(sqlRequest);
+        ArrayList<String> resultArray = new ArrayList<>();
+        try {
+            while (rs.next()) {
+                String id = rs.getString("номер");
+                String fio = rs.getString("фио");
+                String sex = rs.getString("пол");
+                String group = rs.getString("группа");
+                String curator = rs.getString("фио куратора");
+
+                String result = "id = " + id + ", фио = " + fio + ", пол = " + sex + ", группа = " + group + ", фио куратора = " + curator + "\n" ;
+                resultArray.add(result);
+                System.out.println(result);  // Вывод элемента в консоль
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            db.close();
+        }
+        return resultArray;
     }
+
 
     private int totalStudents;
-    public ArrayList<Student> countStd(){
-        db = new MySQLConnector();
-        final String sqlRequest = "SELECT COUNT(*) AS total_students FROM students";
-        ResultSet rs = db.executeRequestWithAnswer(sqlRequest);
-        db.close();
-        return resultSetToArray(rs);
-    }
-
-    public ArrayList<Student> studentList = countStd();
 
     public int getTotalStudents() {
         return totalStudents;
@@ -99,5 +109,27 @@ public class StudentsTable extends AbsTable{
         }
         return result;
     }
+
+    public ArrayList<String> countStd() {
+        db = new MySQLConnector();
+        final String sqlRequest = "SELECT COUNT(*) AS total_students FROM students";
+        ResultSet rs = db.executeRequestWithAnswer(sqlRequest);
+        ArrayList<String> resultArray = new ArrayList<>();
+
+        try {
+            if (rs.next()) {
+                int totalStudents = rs.getInt("total_students");
+                String resultString = "total_students = " + totalStudents;
+                resultArray.add(resultString);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            db.close();
+        }
+
+        return resultArray;
+    }
+
 }
 

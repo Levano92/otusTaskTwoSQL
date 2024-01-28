@@ -8,13 +8,15 @@ import tables.StudyGroupTable;
 import tables.DevicesTable;
 import objects.Device;
 
+import java.beans.Statement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public class Main {
 
     public static void main(String[] args) {
         DevicesTable table = new DevicesTable();
-        //table.writeAll();
+        table.writeAll();
 
 
         StudentsTable table_1 = new StudentsTable();
@@ -94,7 +96,7 @@ public class Main {
             idG += 1;
             idC += 1;
         }
-        //table_3.writeAll();
+        table_3.writeAll();
 
 
         System.out.println("----------------------------------------------------------");
@@ -124,9 +126,17 @@ public class Main {
             System.out.println(tmp.toString());
         }
 
-        System.out.println("Смотри тут");
-        StudentsTable studentsTable = new StudentsTable();
-        studentsTable.countStd();
 
+        StudentsTable studentsTable = new StudentsTable();
+        ArrayList<String> studentscount = studentsTable.countStd();
+
+       System.out.println("Количество студентов");
+       System.out.println("----------------------------------------------------------");
+       System.out.println(studentscount);
+
+       ArrayList<String> studentsinfo = studentsTable.getFullInformation();
+       System.out.println("----------------------------------------------------------");
+       System.out.println("Полная инфа!!!");
+       System.out.println(studentsinfo);
     }
 }
