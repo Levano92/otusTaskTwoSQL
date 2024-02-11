@@ -34,15 +34,4 @@ public class StudyGroup {
         return curator_id;
     }
 
-    public void setGroup_id(long group_id) {
-        this.group_id = group_id;
-    }
-
-    public void setGroup_name(String group_name) {
-        this.group_name = group_name;
-    }
-
-    public void setCurator_id(long curator_id) {
-        this.curator_id = curator_id;
-    }
 }

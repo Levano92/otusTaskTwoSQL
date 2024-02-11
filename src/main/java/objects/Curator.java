@@ -25,11 +25,5 @@ public class Curator {
         return curator_fio;
     }
 
-    public void setCurator_id(long curator_id) {
-        this.curator_id = curator_id;
-    }
 
-    public void setCurator_fio(String curator_fio) {
-        this.curator_fio = curator_fio;
-    }
 }

@@ -5,20 +5,12 @@ import settings.RandomNumberGenerator;
 import tables.StudentsTable;
 import tables.CuratorTable;
 import tables.StudyGroupTable;
-import tables.DevicesTable;
-import objects.Device;
 
-import java.beans.Statement;
-import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public class Main {
 
     public static void main(String[] args) {
-        DevicesTable table = new DevicesTable();
-        table.writeAll();
-
-
         StudentsTable table_1 = new StudentsTable();
         table_1.writeAll();
         System.out.println("----------------------------------------------------------");
@@ -98,28 +90,6 @@ public class Main {
         }
         table_3.writeAll();
 
-
-        System.out.println("----------------------------------------------------------");
-
-        ArrayList<Device> devices = table.selectAll();
-        for (Device tmp: devices) {
-            System.out.println(tmp.toString());
-        }
-        System.out.println("----------------------------------------------------------");
-        devices = table.selectAllActive();
-        for (Device tmp: devices) {
-            System.out.println(tmp.toString());
-        }
-        System.out.println("----------------------------------------------------------");
-        devices = table.selectAllByDeviceOS("iOS");
-        for (Device tmp: devices) {
-            System.out.println(tmp.toString());
-        }
-        System.out.println("----------------------------------------------------------");
-        Device device = new Device(3, "IPhone 17", "iOS", "Y");
-        table.insert(device);
-        table.writeAll();
-
         System.out.println("----------------------------------------------------------");
         ArrayList<Student> students = table_1.selectBySex("Ж");
         for (Student tmp: students) {
@@ -138,5 +108,20 @@ public class Main {
        System.out.println("----------------------------------------------------------");
        System.out.println("Полная инфа!!!");
        System.out.println(studentsinfo);
+
+       System.out.println("----------------------------------------------------------");
+       System.out.println("Смена куратора у группы");
+       StudyGroupTable group = new StudyGroupTable();
+       group.update();
+
+       System.out.println("----------------------------------------------------------");
+        System.out.println("вывод инфы по группам");
+       StudyGroupTable studyGroupTable = new StudyGroupTable();
+       ArrayList<String> curAndGR = studyGroupTable.getCuratorAndGroup();
+       System.out.println(curAndGR);
+
+
     }
+
+
 }

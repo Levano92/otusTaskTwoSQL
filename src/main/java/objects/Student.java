@@ -41,19 +41,5 @@ public class Student {
         return group_id;
     }
 
-    public void setStudent_id(long student_id) {
-        this.student_id = student_id;
-    }
 
-    public void setStudent_fio(String student_fio) {
-        this.student_fio = student_fio;
-    }
-
-    public void setSex(String sex) {
-        this.sex = sex;
-    }
-
-    public void setGroup_id(long group_id) {
-        this.group_id = group_id;
-    }
 }

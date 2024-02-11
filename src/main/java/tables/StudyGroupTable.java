@@ -17,13 +17,28 @@ public class StudyGroupTable extends AbsTable{
         create();
     }
 
-    public ArrayList<StudyGroup> selectAll(){
-        //Подключиться к БД
+    public ArrayList<String> getCuratorAndGroup() {
         db = new MySQLConnector();
-        //Сделать запрос на выборку
-        final String sqlRequest = String.format("SELECT * FROM %s", tableName);
+        final String sqlRequest = "" +
+                "SELECT studygroup.group_name, curator.curator_fio\n" +
+                "FROM studygroup\n" +
+                "JOIN curator ON studygroup.curator_id = curator.curator_id;";
         ResultSet rs = db.executeRequestWithAnswer(sqlRequest);
-        return resultSetToArray(rs);
+        ArrayList<String> resultArray = new ArrayList<>();
+        try {
+            while (rs.next()) {
+                String id = rs.getString("group_name");
+                String fio = rs.getString("curator_fio");
+                String result = "группа= " + id + ", куратор = " + fio +"\n" ;
+                resultArray.add(result);
+                //System.out.println(result);  // Вывод элемента в консоль
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            db.close();
+        }
+        return resultArray;
     }
 
     public void insert(StudyGroup group){
@@ -35,14 +50,14 @@ public class StudyGroupTable extends AbsTable{
         db.executeRequest(sqlRequest);
         db.close();
     }
-
-    public void updateCurator(){
+    public void update() {
+        // Подключиться к БД
         db = new MySQLConnector();
-            final String sqlRequest = "update studygroup\n" +
-                    "set curator_id = 4\n" +
-                    "where  curator_id = 1; ";
+        final String sqlRequest = "UPDATE studygroup SET curator_id = 4 WHERE group_name = 'JAVA'";
         db.executeRequest(sqlRequest);
+        db.close();
     }
+
 
     private ArrayList<StudyGroup> resultSetToArray(ResultSet rs){
         ArrayList<StudyGroup> result = new ArrayList<>();
